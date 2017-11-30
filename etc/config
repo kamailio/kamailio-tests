@@ -1,0 +1,10 @@
+# config variables
+
+KAMBIN=${KAMBIN:-/usr/local/sbin/kamailio}
+KAMCFG=${KAMCFG:-/usr/local/sbin/kamailio.cfg}
+KAMRUN=${KAMRUN:-/var/run/kamailio}
+KAMPID=${KAMPID:-${KAMRUN}/kamailio.pid}
+
+LOGFILE=/tmp/kamailio-tests.log
+
+UNITOUTPUT=${UNITOUTPUT:-yes}

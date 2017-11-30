@@ -1,0 +1,126 @@
+#!/bin/bash
+
+. etc/config
+
+### version for this script
+VERSION='1.0.0'
+LOGDATE=`date`
+
+ktestsctl_usage() {
+	cat <<EOF
+$0 [options] cmd [params]
+
+Options:
+  -q | --quiet ..... execution of unit tests in silent mode
+
+Commands:
+  -- command 'run' --
+  run .............. run all tests
+  run <filter> ..... run tests with a filter on unit names
+  run <unitname> ... run the test uning
+
+  -- command 'version' --
+  version .......... print the version string
+
+Version: $0 ${VERSION}
+
+EOF
+}
+
+ktestsrun() {
+	echo "=== unit tests execution start ==="
+	echo "running test units at: ${LOGDATE}" >${LOGFILE}
+	echo "" >>${LOGFILE}
+	if [ $# -lt 2 ] ; then
+		UNITSLIST=`find units/t* -maxdepth 1 -type d`
+	else
+		UNITSLIST=`find units/${1}* -maxdepth 1 -type d`
+	fi
+	for tdir in ${UNITSLIST} ; do
+		if [[ -d "${tdir}" && ! -L "${tdir}" ]]; then
+			tname=`basename ${tdir}`
+			texec="${tname}.sh"
+			tpath="${tdir}/${texec}"
+
+			if [[ -f "${tpath}" && -x "${tpath}" ]]; then
+				echo
+				tsummary=""
+				if [[ -f "${tdir}/README.md" ]]; then
+					tsummary=`grep "^Summary: " ${tdir}/README.md | cut -c10-`
+				fi
+				if [[ ! -z "${tsummary}" ]]; then
+					echo "* test unit ${tname}: ${tsummary}" | tee -a ${LOGFILE}
+				fi
+				echo "test unit ${tname}: running ..."
+				cd ${tdir}
+				if [ "${UNITOUTPUT}" == "no" ]; then
+					# save stdout and stderr, then redirect to /dev/null
+					exec 3>&1 4>&2 >/dev/null 2>&1
+				fi
+				./${texec}
+				ret=$?
+				if [ "${UNITOUTPUT}" == "no" ]; then
+					# restore stdout and stderr
+					exec 1>&3 2>&4
+				fi
+				cd ../..
+				if [ ! "$ret" -eq 0 ] ; then
+					echo "- test unit ${tname}: failed" | tee -a ${LOGFILE}
+				else
+					echo "- test unit ${tname}: ok" | tee -a ${LOGFILE}
+				fi
+			fi
+		fi
+	done
+	sleep 1
+	echo
+	echo "=== unit tests execution report ==="
+	echo
+	cat ${LOGFILE}
+	echo
+	echo "=== unit tests execution end ==="
+	echo
+}
+
+#
+##### ================================================ #####
+
+### evaluate first the options
+CMDPARAMS=()
+while [[ $# -gt 0 ]]
+do
+	key="$1"
+
+	case $key in
+		-q|--quiet)
+			UNITOUTPUT="no"
+			shift
+		;;
+		*)
+			CMDPARAMS+=("$1")
+			shift
+		;;
+	esac
+done
+
+set -- "${CMDPARAMS[@]}" # restore positional parameters
+
+### main command switch
+#
+case $1 in
+	run)
+		if [ $# -lt 2 ] ; then
+			ktestsrun
+		else
+			ktestsrun "${1}"
+		fi
+		;;
+	version)
+		echo  "$0 $VERSION"
+		;;
+
+	*)
+		ktestsctl_usage
+		exit 1
+		;;
+esac

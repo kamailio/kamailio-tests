@@ -1,0 +1,9 @@
+# common functions
+
+kill_kamailio() {
+	killall kamailio
+}
+
+kill_pidfile() {
+	kill $(cat ${1})
+}
