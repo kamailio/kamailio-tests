@@ -6,4 +6,4 @@ Following tests are done:
 
   * run kamailio -c
   * run kamailio with default config
-  * run kamailio with -A WITH_DEBUG
+  * run kamailio with default config and -A WITH_DEBUG
