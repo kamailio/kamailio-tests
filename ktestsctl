@@ -11,6 +11,7 @@ ktestsctl_usage() {
 $0 [options] cmd [params]
 
 Options:
+  -m | --mysql ..... prepare mysql database
   -q | --quiet ..... execution of unit tests in silent mode
 
 Commands:
@@ -27,6 +28,33 @@ Version: $0 ${VERSION}
 EOF
 }
 
+ktestsctl_mysqld_alive() {
+	mysqladmin -h localhost ping
+}
+
+# prepare mysql server
+ktestsctl_mysql() {
+	echo "=== unit tests - prepare mysql server ==="
+	/usr/sbin/mysqld &
+	sleep 5
+	count=0
+	until ( ktestsctl_mysqld_alive )
+	do
+		((count++))
+		if [ ${count} -gt 50 ]
+		then
+			echo "error: mysqld did not become ready in time"
+			exit 1
+		fi
+	sleep 0.1
+	done
+	sleep 1
+	mysqladmin -u root password "${DBROOTPW}"
+	INSTALL_EXTRA_TABLES=yes INSTALL_PRESENCE_TABLES=yes \
+		INSTALL_DBUID_TABLES=yes CHARSET="latin1" kamdbctl create
+}
+
+# execute one or more test units
 ktestsrun() {
 	echo "=== unit tests execution start ==="
 	echo "running test units at: ${LOGDATE}" >${LOGFILE}
@@ -92,6 +120,10 @@ do
 	key="$1"
 
 	case $key in
+		-m|--mysql)
+			ktestsctl_mysql
+			shift
+		;;
 		-q|--quiet)
 			UNITOUTPUT="no"
 			shift
