@@ -13,6 +13,7 @@ $0 [options] cmd [params]
 Options:
   -m | --mysql ..... prepare mysql database
   -q | --quiet ..... execution of unit tests in silent mode
+  -w | --wait ...... wait at the end of running the unit tests
 
 Commands:
   -- command 'run' --
@@ -115,6 +116,7 @@ ktestsrun() {
 
 ### evaluate first the options
 CMDPARAMS=()
+KTESTSWAIT="no"
 while [[ $# -gt 0 ]]
 do
 	key="$1"
@@ -126,6 +128,10 @@ do
 		;;
 		-q|--quiet)
 			UNITOUTPUT="no"
+			shift
+		;;
+		-w|--wait)
+			KTESTSWAIT="yes"
 			shift
 		;;
 		*)
@@ -145,6 +151,11 @@ case $1 in
 			ktestsrun
 		else
 			ktestsrun "${1}"
+		fi
+		if [ "${KTESTSWAIT}" == "yes" ]; then
+			echo
+			echo "=== waiting ..."
+			wait
 		fi
 		;;
 	version)
