@@ -52,6 +52,13 @@ The Docker files that can be used to build Docker images to run the unit tests a
   from source code. The directory with Kamailio source code is copied from local disk into the
   container
 
+### Tools For Unit Tests ###
+
+Following tools are installed inside the container and can be used to create test units:
+
+  * `sipsak`
+  * `sipp` (`sip-tester`)
+
 ## Running Unit Tests ##
 
 ### Dependencies ###
@@ -127,3 +134,20 @@ Save and then run:
 docker build -t kamailio-tests-deb9x .
 docker run kamailio-tests-deb9x
 ```
+
+If you run `ktestsctl` with `-w` option, you may need to stop the container using `docker` command:
+
+```
+docker ps
+docker stop <containerid>
+```
+
+## Contributing ##
+
+Contributions are more than welcome, recommended way is to do pull requests.
+
+## Support ##
+
+Mailing list:
+
+  * <sr-users [at] lists.kamailio.org>
