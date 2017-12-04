@@ -89,7 +89,7 @@ git clone https://github.com/kamailio/kamailio
   * copy desired Dockerfile in the current folder
 
 ```
-cp kamailio-tests/docker/Dockerfile
+cp kamailio-tests/docker/Dockerfile .
 ```
 
   * build the Docker image
