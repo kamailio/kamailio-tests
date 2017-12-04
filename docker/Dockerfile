@@ -33,4 +33,5 @@ ENV DBROOTPW=ktestsrootpw
 COPY kamailio-tests /usr/local/src/kamailio-tests
 WORKDIR /usr/local/src/kamailio-tests
 
-CMD /usr/local/src/kamailio-tests/ktestsctl -m -q run
+ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]
+CMD ["-m", "-q", "run"]
