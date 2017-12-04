@@ -106,33 +106,17 @@ docker run kamailio-tests-deb9x
 
 With the default `Dockerfile`, the above command is running all unit tests.
 
-You can edit the `Dockerfile` and change the `CMD` line to execute a different command. Once
-you save the changes in the `Dockerfile`, rebuild the docker container and run.
+You can specify other options for `ktestsctl` by passing them to the Docker run command.
 
-For example, run the unit tests in non-silent mode, set `CMD` inside `Dockerfile` to:
-
+For example, run the unit tests in non-silent mode:
 ```
-CMD /usr/local/src/kamailio-tests/ktestsctl run
+docker run kamailio-tests-deb9x run
 ```
 
-Save and then run:
+Example running only default `kamailio.cfg` related unit tests:
 
 ```
-docker build -t kamailio-tests-deb9x .
-docker run kamailio-tests-deb9x
-```
-
-Example running only default `kamailio.cfg` related unit tests, update `Dockerfile` to have:
-
-```
-CMD /usr/local/src/kamailio-tests/ktestsctl run tcfgxx
-```
-
-Save and then run:
-
-```
-docker build -t kamailio-tests-deb9x .
-docker run kamailio-tests-deb9x
+docker run kamailio-tests-deb9x run tcfgxx
 ```
 
 If you run `ktestsctl` with `-w` option, you may need to stop the container using `docker` command:
