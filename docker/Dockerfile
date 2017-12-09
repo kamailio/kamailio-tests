@@ -5,7 +5,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 RUN apt-get update
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils procps \
         pkg-config gcc g++ make autoconf ctags bison flex libpcre3-dev libxml2-dev libssl-dev \
-        git ngrep vim sipsak sip-tester
+        git ngrep vim sipsak sip-tester gdb
 
 ENV MYSQL_ROOT_PASSWORD=ktestsrootpw
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes mysql-client mysql-server default-libmysqlclient-dev
