@@ -58,6 +58,10 @@ Following tools are installed inside the container and can be used to create tes
 
   * `sipsak`
   * `sipp` (`sip-tester`)
+  * `jq`
+  * `gdb`
+  * `sed`
+  * `awk`
 
 ## Running Unit Tests ##
 
@@ -100,15 +104,23 @@ docker build -t kamailio-tests-deb9x .
 
 ### Execute Unit Tests ###
 
+The `Dokerfile` defines the `ENTRYPOINT` to the path of `ktestsctl`:
+
+```
+ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]
+```
+
+With the default `Dockerfile`, the next command is running all unit tests:
+
 ```
 docker run kamailio-tests-deb9x
 ```
-
-With the default `Dockerfile`, the above command is running all unit tests.
+The default options are `-m` (create mysql database) and `-q` (quiet/silent mode).
 
 You can specify other options for `ktestsctl` by passing them to the Docker run command.
 
 For example, run the unit tests in non-silent mode:
+
 ```
 docker run kamailio-tests-deb9x run
 ```
@@ -119,7 +131,14 @@ Example running only default `kamailio.cfg` related unit tests:
 docker run kamailio-tests-deb9x run tcfgxx
 ```
 
-If you run `ktestsctl` with `-w` option, you may need to stop the container using `docker` command:
+Running `ktestsctl` with `-w` option requires to use docker in interactive
+mode:
+
+```
+docker run -i kamailio-tests-deb9x run -w
+```
+
+To stop a running container:
 
 ```
 docker ps
