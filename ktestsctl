@@ -155,7 +155,9 @@ case $1 in
 		if [ "${KTESTSWAIT}" == "yes" ]; then
 			echo
 			echo "=== waiting ..."
-			wait
+			echo "=== this option requires to use 'docker run -i ...''"
+			echo "=== to exit: press any key and <enter>"
+			read -rs -n 1 key
 		fi
 		;;
 	version)
