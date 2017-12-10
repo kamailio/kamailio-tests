@@ -2,27 +2,76 @@ FROM debian:stretch
 
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN apt-get update
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils procps \
-        pkg-config gcc g++ make autoconf ctags bison flex libpcre3-dev libxml2-dev libssl-dev \
-        git ngrep vim sipsak sip-tester gdb
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
+  autoconf gcc g++ make procps \
+  ctags gawk gdb git jq netcat ngrep sed sip-tester sipsak vim \
+  bison \
+  debhelper \
+  default-libmysqlclient-dev \
+  dh-systemd \
+  docbook-xml \
+  dpkg-dev \
+  erlang-dev \
+  flex \
+  gcj-jdk \
+  libbson-dev \
+  libconfuse-dev \
+  libcurl4-openssl-dev \
+  libdb-dev \
+  libev-dev \
+  libevent-dev \
+  libexpat1-dev \
+  libgeoip-dev \
+  libhiredis-dev \
+  libjansson-dev \
+  libjson-c-dev \
+  libldap2-dev \
+  liblua5.1-0-dev \
+  libmaxminddb-dev \
+  libmemcached-dev \
+  libmongoc-dev \
+  libmono-2.0-dev \
+  libncurses5-dev \
+  libpcre3-dev \
+  libperl-dev \
+  libphonenumber-dev \
+  libpq-dev \
+  librabbitmq-dev \
+  libradcli-dev \
+  libreadline-dev \
+  libsasl2-dev \
+  libsctp-dev \
+  libsnmp-dev \
+  libsqlite3-dev \
+  libssl-dev \
+  libsystemd-dev \
+  libunistring-dev \
+  libxml2-dev \
+  openssl \
+  pkg-config \
+  python \
+  python-dev \
+  unixodbc-dev \
+  uuid-dev \
+  xsltproc \
+  zlib1g-dev
 
 ENV MYSQL_ROOT_PASSWORD=ktestsrootpw
-RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes mysql-client mysql-server default-libmysqlclient-dev
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes mysql-client mysql-server
 RUN rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
-	&& chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
-	&& chmod 777 /var/run/mysqld \
-	&& find /etc/mysql/ -name '*.cnf' -print0 \
-		| xargs -0 grep -lZE '^(bind-address|log)' \
-		| xargs -rt -0 sed -Ei 's/^(bind-address|log)/#&/' \
-	&& echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf
+  && chown -R mysql:mysql /var/lib/mysql /var/run/mysqld \
+  && chmod 777 /var/run/mysqld \
+  && find /etc/mysql/ -name '*.cnf' -print0 \
+    | xargs -0 grep -lZE '^(bind-address|log)' \
+    | xargs -rt -0 sed -Ei 's/^(bind-address|log)/#&/' \
+  && echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf
 RUN mysql_install_db --user=mysql
 
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
-RUN make include_modules="db_mysql tls" cfg
-RUN make all
-RUN make install
+RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp" cfg
+RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
+RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 install
 WORKDIR src/modules/tls
 RUN make install-tls-cert
 
