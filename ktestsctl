@@ -14,12 +14,16 @@ Options:
   -m | --mysql ..... prepare mysql database
   -q | --quiet ..... execution of unit tests in silent mode
   -w | --wait ...... wait at the end of running the unit tests
+              ...... (for docker it requires interactive mode: docker run -i ...)
 
 Commands:
   -- command 'run' --
   run .............. run all tests
   run <filter> ..... run tests with a filter on unit names
   run <unitname> ... run the test uning
+
+  -- command 'help' --
+  help ............. print the help text
 
   -- command 'version' --
   version .......... print the version string
@@ -160,10 +164,13 @@ case $1 in
 			read -rs -n 1 key
 		fi
 		;;
+	help)
+		ktestsctl_usage
+		exit 1
+		;;
 	version)
 		echo  "$0 $VERSION"
 		;;
-
 	*)
 		ktestsctl_usage
 		exit 1
