@@ -83,4 +83,4 @@ COPY kamailio-tests /usr/local/src/kamailio-tests
 WORKDIR /usr/local/src/kamailio-tests
 
 ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]
-CMD ["-m", "-q", "run"]
+CMD ["-m", "run"]
