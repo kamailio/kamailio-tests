@@ -64,7 +64,7 @@ ktestsrun() {
 	echo "=== unit tests execution start ==="
 	echo "running test units at: ${LOGDATE}" >${LOGFILE}
 	echo "" >>${LOGFILE}
-	if [ $# -lt 2 ] ; then
+	if [ $# -lt 1 ] ; then
 		UNITSLIST=`find units/t* -maxdepth 1 -type d`
 	else
 		UNITSLIST=`find units/${1}* -maxdepth 1 -type d`
@@ -149,12 +149,13 @@ set -- "${CMDPARAMS[@]}" # restore positional parameters
 
 ### main command switch
 #
+echo
 case $1 in
 	run)
 		if [ $# -lt 2 ] ; then
 			ktestsrun
 		else
-			ktestsrun "${1}"
+			ktestsrun "${2}"
 		fi
 		if [ "${KTESTSWAIT}" == "yes" ]; then
 			echo
