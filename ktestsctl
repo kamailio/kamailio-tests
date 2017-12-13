@@ -150,6 +150,11 @@ set -- "${CMDPARAMS[@]}" # restore positional parameters
 ### main command switch
 #
 echo
+if [ -n "${KAMRUN}" ] ; then
+	mkdir -p ${KAMRUN}
+	chmod a+w ${KAMRUN}
+fi
+
 case $1 in
 	run)
 		if [ $# -lt 2 ] ; then
