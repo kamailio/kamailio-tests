@@ -4,10 +4,13 @@
 . ../../libs/utils
 
 echo "--- start kamailio -f ./kamailio-tasync0001.cfg"
-${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -f ./kamailio-tasync0001.cfg -a no -ddd -E 2>&1 | tee /tmp/kamailio-tasync0001.log
+${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -f ./kamailio-tasync0001.cfg -a no -ddd -E 2>&1 | tee /tmp/kamailio-tasync0001.log &
 ret=$?
 sleep 1
+sipsak -s sip:test@127.0.0.1
+sleep 1
 kill_pidfile ${KAMPID}
+sleep 1
 echo
 echo "--- grep output"
 echo
