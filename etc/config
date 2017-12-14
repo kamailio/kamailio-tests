@@ -1,6 +1,7 @@
 # config variables
 
 KAMBIN=${KAMBIN:-/usr/local/sbin/kamailio}
+KAMCTL=${KAMCTL:-/usr/local/sbin/kamctl}
 KAMCFG=${KAMCFG:-/usr/local/sbin/kamailio.cfg}
 KAMRUN=${KAMRUN:-/var/run/kamailio}
 KAMPID=${KAMPID:-${KAMRUN}/kamailio.pid}
