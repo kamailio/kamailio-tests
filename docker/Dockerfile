@@ -4,7 +4,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   autoconf gcc g++ make procps \
-  ctags gawk gdb git jq lynx netcat ngrep sed sip-tester sipsak vim wget \
+  ctags gawk gdb git jq lynx netcat ngrep sed sip-tester vim wget \
   bison \
   debhelper \
   default-libmysqlclient-dev \
@@ -66,6 +66,14 @@ RUN rm -rf /var/lib/mysql && mkdir -p /var/lib/mysql /var/run/mysqld \
     | xargs -rt -0 sed -Ei 's/^(bind-address|log)/#&/' \
   && echo '[mysqld]\nskip-host-cache\nskip-name-resolve' > /etc/mysql/conf.d/docker.cnf
 RUN mysql_install_db --user=mysql
+
+WORKDIR /usr/local/src
+RUN git clone https://github.com/nils-ohlmeier/sipsak
+WORKDIR /usr/local/src/sipsak
+RUN autoreconf --install
+RUN ./configure
+RUN make
+RUN make install
 
 RUN mkdir -p /usr/local/src/data/GeoLite2
 RUN mkdir -p /usr/local/src/tmp
