@@ -4,7 +4,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   autoconf gcc g++ make procps \
-  ctags gawk gdb git jq lynx netcat ngrep sed sip-tester vim wget \
+  coreutils ctags curl gawk gdb git jq lynx netcat ngrep sed sip-tester vim wget \
   bison \
   debhelper \
   default-libmysqlclient-dev \
