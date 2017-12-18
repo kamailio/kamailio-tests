@@ -56,12 +56,16 @@ The Docker files that can be used to build Docker images to run the unit tests a
 
 Following tools are installed inside the container and can be used to create test units:
 
-  * `sipsak`
-  * `sipp` (`sip-tester`)
-  * `jq`
-  * `gdb`
-  * `sed`
   * `awk`
+  * `coreutils` package
+  * `curl`
+  * `gdb` (requires to run `docker` with `--cap-add=SYS_PTRACE`)
+  * `grep`
+  * `jq`
+  * `sed`
+  * `sipp` (`sip-tester`)
+  * `sipsak` (installed from git)
+
 
 ## Running Unit Tests ##
 
