@@ -32,7 +32,7 @@ Inside each unit directory should be at least two files:
 
 The shell script is executed inside the unit directory by `ktestsctl`.
 
-The `README.md` in a text file in `markdown` format. It should have a line that starts with
+The `README.md` is a text file in `markdown` format. It should have a line that starts with
 `Summary: ` and provides a short description of the unit test. The text in the line after
 `Summary: ` is used by `ktestsctl` when writing the unit tests execution report.
 
@@ -45,7 +45,7 @@ Useful shell functions that might be handy to use in units are stored inside fil
 
   * `lib/utils` - common utility functions
 
-The Docker files that can be used to build Docker images to run the unit tests are located in
+The Dockerfiles that can be used to build Docker images to run the unit tests are located in
 `docker` subfolder. These are:
 
   * `docker/Dockerfile` - container build with Debian 9.x (Stretch) deploying Kamailio installed
@@ -108,7 +108,7 @@ docker build -t kamailio-tests-deb9x .
 
 ### Execute Unit Tests ###
 
-The `Dokerfile` defines the `ENTRYPOINT` to the path of `ktestsctl`:
+The `Dockerfile` defines the `ENTRYPOINT` to the path of `ktestsctl`:
 
 ```
 ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]
@@ -119,14 +119,14 @@ With the default `Dockerfile`, the next command is running all unit tests:
 ```
 docker run kamailio-tests-deb9x
 ```
-The default options are `-m` (create mysql database) and `-q` (quiet/silent mode).
+The default option is `-m` (create mysql database).
 
 You can specify other options for `ktestsctl` by passing them to the Docker run command.
 
-For example, run the unit tests in non-silent mode:
+For example, run the unit tests in silent mode:
 
 ```
-docker run kamailio-tests-deb9x run
+docker run kamailio-tests-deb9x -q run
 ```
 
 Example running only default `kamailio.cfg` related unit tests:
