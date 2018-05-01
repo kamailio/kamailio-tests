@@ -20,7 +20,7 @@ Commands:
   -- command 'run' --
   run .............. run all tests
   run <filter> ..... run tests with a filter on unit names
-  run <unitname> ... run the test uning
+  run <unitname> ... run the test unit
 
   -- command 'help' --
   help ............. print the help text
@@ -40,7 +40,13 @@ ktestsctl_mysqld_alive() {
 # prepare mysql server
 ktestsctl_mysql() {
 	echo "=== unit tests - prepare mysql server ==="
-	/usr/sbin/mysqld &
+
+	if [ -f /etc/redhat-release ] ; then
+		mysqld_safe &
+	else
+		/usr/sbin/mysqld &
+	fi
+
 	sleep 5
 	count=0
 	until ( ktestsctl_mysqld_alive )
