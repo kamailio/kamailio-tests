@@ -48,9 +48,13 @@ Useful shell functions that might be handy to use in units are stored inside fil
 The Dockerfiles that can be used to build Docker images to run the unit tests are located in
 `docker` subfolder. These are:
 
-  * `docker/Dockerfile` - container build with Debian 9.x (Stretch) deploying Kamailio installed
+  * `docker/Dockerfile.debian9` - container build with Debian 9.x (Stretch) deploying Kamailio installed
   from source code. The directory with Kamailio source code is copied from local disk into the
   container
+  * `docker/Dockerfile.centos7` - container build with CentOS 7 deploying Kamailio installed
+  from source code. The directory with Kamailio source code is copied from local disk into the
+  container
+
 
 ### Tools For Unit Tests ###
 
@@ -97,7 +101,7 @@ git clone https://github.com/kamailio/kamailio
   * copy desired Dockerfile in the current folder
 
 ```
-cp kamailio-tests/docker/Dockerfile .
+cp kamailio-tests/docker/Dockerfile.debian9 Dockerfile
 ```
 
   * build the Docker image
