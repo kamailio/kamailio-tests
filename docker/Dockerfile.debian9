@@ -98,6 +98,7 @@ ENV DBRWPW=kamailiorw
 ENV DBROOTPW=ktestsrootpw
 
 COPY kamailio-tests /usr/local/src/kamailio-tests
+COPY kamailio-tests/etc/excludeunits.txt.debian9 /usr/local/src/kamailio-tests/excludeunits.txt
 WORKDIR /usr/local/src/kamailio-tests
 
 ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]

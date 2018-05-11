@@ -58,6 +58,7 @@ ENV DBROOTPW=ktestsrootpw
 RUN mysql_install_db --user=mysql
 
 COPY kamailio-tests /usr/local/src/kamailio-tests
+COPY kamailio-tests/etc/excludeunits.txt.centos7 /usr/local/src/kamailio-tests/excludeunits.txt
 WORKDIR /usr/local/src/kamailio-tests
 
 ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]

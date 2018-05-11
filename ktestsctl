@@ -3,7 +3,7 @@
 . etc/config
 
 ### version for this script
-VERSION='1.0.0'
+VERSION='1.0.1'
 LOGDATE=`date`
 
 ktestsctl_usage() {
@@ -76,6 +76,11 @@ ktestsrun() {
 		UNITSLIST=`find units/${1}* -maxdepth 1 -type d`
 	fi
 	for tdir in ${UNITSLIST} ; do
+		if [[ ${tdir} =~ $(echo ^units\/\($(paste -sd'|' excludeunits.txt)\)$) ]]; then
+			echo
+			echo "Skipping ${tdir} as requested..."
+			continue
+		fi
 		if [[ -d "${tdir}" && ! -L "${tdir}" ]]; then
 			tname=`basename ${tdir}`
 			texec="${tname}.sh"
