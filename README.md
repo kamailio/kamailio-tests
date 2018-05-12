@@ -153,6 +153,12 @@ docker ps
 docker stop <containerid>
 ```
 
+### Excluding Units ###
+
+You can exclude some units to be launched by listing them, one per line, in
+`etc/excludeunits.txt.DISTRIBUTION` (e.g. `etc/excludeunits.txt.centos7`),
+and then rebuilding the image.
+
 ## Contributing ##
 
 Contributions are more than welcome, recommended way is to do pull requests.
