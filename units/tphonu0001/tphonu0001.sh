@@ -14,7 +14,7 @@ sleep 1
 echo
 echo "--- grep output"
 echo
-grep "phone number is normalized" /tmp/kamailio-tphonu0001.log
+grep "number normalized" /tmp/kamailio-tphonu0001.log
 ret=$?
 rm -f /tmp/kamailio-tphonu0001.log
 if [ ! "$ret" -eq 0 ] ; then
