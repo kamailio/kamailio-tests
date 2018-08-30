@@ -10,6 +10,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-ye
   default-libmysqlclient-dev \
   dh-systemd \
   docbook-xml \
+  docbook2x \
   dpkg-dev \
   erlang-dev \
   flex \
