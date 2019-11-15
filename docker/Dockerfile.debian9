@@ -41,6 +41,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-ye
   librabbitmq-dev \
   libradcli-dev \
   libreadline-dev \
+  librdkafka-dev \
   libsasl2-dev \
   libsctp-dev \
   libsnmp-dev \
@@ -91,7 +92,7 @@ RUN rm -rf tmp
 
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
-RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp" cfg
+RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp rtp_media_server" cfg
 RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
 RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 install
 WORKDIR src/modules/tls
