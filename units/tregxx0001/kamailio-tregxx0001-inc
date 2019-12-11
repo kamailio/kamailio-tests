@@ -1,0 +1,1 @@
+modparam("registrar", "xavp_rcd_mask", #mask#)
