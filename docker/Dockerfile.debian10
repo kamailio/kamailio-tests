@@ -82,8 +82,8 @@ RUN make install
 
 RUN mkdir -p /usr/local/src/data/GeoLite2
 RUN mkdir -p /usr/local/src/tmp
+COPY GeoLite2-City.tar.gz  /usr/local/src/tmp/GeoLite2-City.tar.gz
 WORKDIR /usr/local/src/tmp
-RUN wget -O GeoLite2-City.tar.gz http://geolite.maxmind.com/download/geoip/database/GeoLite2-City.tar.gz
 RUN tar xvfz GeoLite2-City.tar.gz
 RUN mv GeoLite2-City_*/*.* ../data/GeoLite2/
 WORKDIR /usr/local/src
