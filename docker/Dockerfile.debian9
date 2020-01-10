@@ -33,6 +33,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-ye
   libmnl-dev \
   libmongoc-dev \
   libmono-2.0-dev \
+  libmosquitto-dev \
   libncurses5-dev \
   libpcre3-dev \
   libperl-dev \
