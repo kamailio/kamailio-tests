@@ -103,11 +103,16 @@ git clone https://github.com/kamailio/kamailio
 
   * copy desired Dockerfile in the current folder
 
+Next example shows the use of the docker file for Debian 9.x.
+
 ```
 cp kamailio-tests/docker/Dockerfile.debian9 Dockerfile
 ```
 
   * build the Docker image
+
+The name of the image can be changed, next example sets a name suggesting
+it is based on Debian 9.x:
 
 ```
 docker build -t kamailio-tests-deb9x .
