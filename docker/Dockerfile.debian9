@@ -103,8 +103,13 @@ ENV DBENGINE=MYSQL
 ENV DBRWPW=kamailiorw
 ENV DBROOTPW=ktestsrootpw
 
+RUN pwd
+RUN ls -la /usr/local/src
+
 COPY kamailio-tests /usr/local/src/kamailio-tests
 COPY kamailio-tests/etc/excludeunits.txt.debian9 /usr/local/src/kamailio-tests/excludeunits.txt
+RUN ls -la /usr/local/src/kamailio-tests
+RUN ls -la /usr/local/src/kamailio-tests/units
 WORKDIR /usr/local/src/kamailio-tests
 
 ENTRYPOINT ["/usr/local/src/kamailio-tests/ktestsctl"]
