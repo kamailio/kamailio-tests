@@ -92,7 +92,7 @@ RUN make install
 
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
-RUN make RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java rtp_media_server kafka secsipid" cfg
+RUN make RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java rtp_media_server secsipid" cfg
 RUN make RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
 RUN make RADCLI=1 install
 WORKDIR src/modules/tls
