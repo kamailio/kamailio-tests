@@ -44,7 +44,7 @@ RUN make install
 
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
-RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java acc_radius auth_radius peering misc_radius phonenum" cfg
+RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java acc_radius auth_radius peering misc_radius phonenum rtp_media_server kafka" cfg
 RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
 RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 install
 WORKDIR src/modules/tls
