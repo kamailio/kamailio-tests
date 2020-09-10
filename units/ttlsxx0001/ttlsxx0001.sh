@@ -13,5 +13,14 @@ kill_pidfile ${KAMPID}
 if [ ! "$ret" -eq 0 ] ; then
     exit $ret
 fi
+sleep 1
+echo
+echo "--- grep output"
+echo
+grep "TLS accept successful" /tmp/kamailio-ttlsxx0001.log
+ret=$?
+if [ ! "$ret" -eq 0 ] ; then
+    exit 1
+fi
 
 exit $ret
