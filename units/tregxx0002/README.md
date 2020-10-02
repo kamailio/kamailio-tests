@@ -1,6 +1,6 @@
-# Regisrar - xavp_rcd Tests #
+# Registrar - xavp_rcd Tests #
 
-Summary: regisrar - check xavp_rcd values
+Summary: registrar - check xavp_rcd values
 
 Following tests are done:
 
