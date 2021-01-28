@@ -15,7 +15,7 @@ RUN yum update -y && yum install -y --setopt=tsflags=nodocs epel-release && \
     libuuid-devel systemd-devel squirrel-devel uuid-devel librabbitmq-devel \
     gcc-c++ autoconf automake wget mono-devel mongodb-devel mongo-c-driver \
     mongo-c-driver-devel radiusclient-ng-devel libmaxminddb-devel libev-devel \
-    openssl
+    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel
 
 ENV MYSQL_ROOT_PASSWORD=ktestsrootpw
 
