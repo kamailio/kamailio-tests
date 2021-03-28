@@ -15,7 +15,7 @@ RUN yum update -y && yum install -y --setopt=tsflags=nodocs epel-release && \
     libuuid-devel systemd-devel squirrel-devel uuid-devel librabbitmq-devel \
     gcc-c++ autoconf automake wget mono-devel mongodb-devel mongo-c-driver \
     mongo-c-driver-devel radiusclient-ng-devel libmaxminddb-devel libev-devel \
-    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel
+    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel nc
 
 ENV MYSQL_ROOT_PASSWORD=ktestsrootpw
 
@@ -44,7 +44,7 @@ RUN make install
 
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
-RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java acc_radius auth_radius peering misc_radius phonenum rtp_media_server kafka secsipid" cfg
+RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 exclude_modules="stirshaken secsipid_proc jwt lwsc db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java acc_radius auth_radius peering misc_radius phonenum rtp_media_server kafka secsipid" cfg
 RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
 RUN make JAVA_HOME=/usr/lib/jvm/java-gcj RADCLI=1 install
 WORKDIR src/modules/tls
