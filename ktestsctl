@@ -6,6 +6,9 @@
 VERSION='1.0.1'
 LOGDATE=`date`
 
+### return non-zero code if at least one test failed
+TESTS_FAILED=0
+
 ktestsctl_usage() {
 	cat <<EOF
 $0 [options] cmd [params]
@@ -110,6 +113,7 @@ ktestsrun() {
 				cd ../..
 				if [ ! "$ret" -eq 0 ] ; then
 					echo "- test unit ${tname}: failed" | tee -a ${LOGFILE}
+					TESTS_FAILED=1
 				else
 					echo "- test unit ${tname}: ok" | tee -a ${LOGFILE}
 				fi
@@ -180,6 +184,7 @@ case $1 in
 			echo "=== to exit: press any key and <enter>"
 			read -rs -n 1 key
 		fi
+		exit $TESTS_FAILED
 		;;
 	help)
 		ktestsctl_usage
