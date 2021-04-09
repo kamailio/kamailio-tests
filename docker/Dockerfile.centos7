@@ -15,7 +15,7 @@ RUN yum update -y && yum install -y --setopt=tsflags=nodocs epel-release && \
     libuuid-devel systemd-devel squirrel-devel uuid-devel librabbitmq-devel \
     gcc-c++ autoconf automake wget mono-devel mongodb-devel mongo-c-driver \
     mongo-c-driver-devel radiusclient-ng-devel libmaxminddb-devel libev-devel \
-    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel nc
+    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel nc readline-devel
 
 ENV MYSQL_ROOT_PASSWORD=ktestsrootpw
 
@@ -24,6 +24,22 @@ RUN yum -y install --setopt=tsflags=nodocs epel-release && \
     yum -y install --setopt=tsflags=nodocs mariadb-server bind-utils pwgen psmisc hostname && \ 
     yum -y erase vim-minimal && \
     yum -y update && yum clean all
+
+# Install luarocks
+RUN wget http://www.lua.org/ftp/lua-5.1.5.tar.gz && \
+    tar -zxvf lua-5.1.5.tar.gz && \
+    cd lua-5.1.5/ && \
+    make linux test && \
+    make install
+RUN wget https://luarocks.github.io/luarocks/releases/luarocks-3.0.4.tar.gz && \
+    tar -zxvf luarocks-3.0.4.tar.gz && \
+    cd luarocks-3.0.4/ && \
+    ./configure --with-lua=/usr/local --with-lua-include=/usr/local/include && \
+    make && \
+    make install && \
+    make bootstrap
+# Install cjson
+RUN luarocks install lua-cjson
 
 WORKDIR /usr/local/src
 RUN git clone -b 0.9.7 https://github.com/nils-ohlmeier/sipsak
