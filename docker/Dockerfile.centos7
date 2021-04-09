@@ -40,6 +40,7 @@ RUN wget https://luarocks.github.io/luarocks/releases/luarocks-3.0.4.tar.gz && \
     make bootstrap
 # Install cjson
 RUN luarocks install lua-cjson
+ENV LUA_CPATH /usr/local/lib/lua/5.1/?.so
 
 WORKDIR /usr/local/src
 RUN git clone -b 0.9.7 https://github.com/nils-ohlmeier/sipsak
