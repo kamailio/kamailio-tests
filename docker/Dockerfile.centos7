@@ -15,7 +15,7 @@ RUN yum update -y && yum install -y --setopt=tsflags=nodocs epel-release && \
     libuuid-devel systemd-devel squirrel-devel uuid-devel librabbitmq-devel \
     gcc-c++ autoconf automake wget mono-devel mongodb-devel mongo-c-driver \
     mongo-c-driver-devel radiusclient-ng-devel libmaxminddb-devel libev-devel \
-    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel nc
+    openssl python3-devel ruby-devel mosquitto-devel libmnl-devel nc luarocks
 
 ENV MYSQL_ROOT_PASSWORD=ktestsrootpw
 
@@ -25,8 +25,11 @@ RUN yum -y install --setopt=tsflags=nodocs epel-release && \
     yum -y erase vim-minimal && \
     yum -y update && yum clean all
 
+# Install cjson
+RUN luarocks install lua-cjson
+
 WORKDIR /usr/local/src
-RUN git clone https://github.com/nils-ohlmeier/sipsak
+RUN git clone -b 0.9.7 https://github.com/nils-ohlmeier/sipsak
 WORKDIR /usr/local/src/sipsak
 RUN autoreconf --install
 RUN ./configure
