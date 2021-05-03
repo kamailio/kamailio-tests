@@ -19,7 +19,7 @@ sipp -sf uas.xml -p 5080 -bg
 sleep 1
 
 echo "-------------- starting sipp UAC -------------------------"
-sipp -sf uac.xml -m 1 127.0.0.1:5060
+sipp -sf uac.xml -m 10 127.0.0.1:5060
 
 tail /tmp/kamailio-thacxx0005.log
 
