@@ -5,8 +5,8 @@
 
 python3 http_server.py &
 
-echo "--- start kamailio -f ./kamailio-thacxx0005.cfg"
-${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -f ./kamailio-thacxx0005.cfg -a no -dd -E 2>&1 | tee /tmp/kamailio-thacxx0005.log &
+echo "--- start kamailio -f ./kamailio-thacxx0006.cfg"
+${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -f ./kamailio-thacxx0006.cfg -a no -dd -E 2>&1 | tee /tmp/kamailio-thacxx0006.log &
 ret=$?
 
 sleep 3
@@ -27,7 +27,7 @@ sleep 1
 killall sipp
 
 echo
-count="$(grep -c "HTTP_REPLY2" /tmp/kamailio-thacxx0005.log)"
+count="$(grep -c "INVITE_REPLY OK" /tmp/kamailio-thacxx0006.log)"
 if [ ! $count -eq $NCALLS ] ; then
     exit 1
 fi
