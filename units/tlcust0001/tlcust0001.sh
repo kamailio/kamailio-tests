@@ -10,9 +10,6 @@ echo "--- start kamailio -f ./kamailio-tlcust0001.cfg"
 ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -f ./kamailio-tlcust0001.cfg -a no 2>&1 | tee /tmp/kamailio-tlcust0001.log &
 ret=$?
 sleep 1
-echo "--- restart nc -ulp 24680 | tee /tmp/kamailio-tlcust0001.netcat &"
-killall nc
-nc -ulp 24680 | tee /tmp/kamailio-tlcust0001.netcat &
 echo "--- run sipsak -s sip:alice@127.0.0.1"
 sipsak -s sip:alice@127.0.0.1
 sleep 1
