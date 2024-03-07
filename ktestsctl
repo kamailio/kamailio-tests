@@ -47,7 +47,7 @@ ktestsctl_mysql() {
 	if [ -f /etc/redhat-release ] ; then
 		mysqld_safe &
 	else
-		/usr/sbin/mysqld &
+		/usr/sbin/mysqld --user=root &
 	fi
 
 	sleep 5
