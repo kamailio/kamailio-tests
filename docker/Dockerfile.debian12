@@ -4,7 +4,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 
 RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   autoconf gcc g++ make procps \
-  coreutils exuberant-ctags curl gawk gdb git jq lynx netcat ngrep sed sip-tester vim wget \
+  coreutils exuberant-ctags curl gawk gdb git jq lynx netcat-traditional ngrep sed sip-tester vim wget \
   bison libtool \
   debhelper \
   default-libmysqlclient-dev \
@@ -57,8 +57,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-ye
   lua-cjson \
   openssl \
   pkg-config \
-  python \
-  python-dev \
+  python3 \
   python3-dev \
   ruby-dev \
   unixodbc-dev \
@@ -97,7 +96,7 @@ RUN make install
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
 RUN git submodule update --init --remote misc/external/wolfssl/wolfssl
-RUN make RADCLI=1 exclude_modules="db_cassandra db_oracle dnssec ndb_cassandra nsq osp app_java secsipid secsipid_proc stirshaken jwt nats ruxc" cfg
+RUN make RADCLI=1 exclude_modules="app_java app_python db_cassandra db_oracle dnssec jwt ndb_cassandra nats nsq osp ruxc secsipid secsipid_proc stirshaken" cfg
 RUN make RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
 RUN make RADCLI=1 install
 WORKDIR src/modules/tls
