@@ -38,6 +38,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   libmono-2.0-dev \
   libmosquitto-dev \
   libncurses5-dev \
+  libnghttp2-dev \
   libortp-dev \
   libpcre2-dev \
   libperl-dev \
