@@ -2,7 +2,9 @@ FROM debian:bookworm
 
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
+RUN apt-get update
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   autoconf gcc g++ make procps \
   coreutils exuberant-ctags curl gawk gdb git jq lynx netcat-traditional ngrep sed sip-tester vim wget \
   bison libtool \
