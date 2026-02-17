@@ -18,7 +18,6 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   libbson-dev \
   libconfuse-dev \
   libcurl4-openssl-dev \
-  libdb-dev \
   libev-dev \
   libevent-dev \
   libgcrypt20-dev \
@@ -50,6 +49,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
   librdkafka-dev \
   libsasl2-dev \
   libsctp-dev \
+  libsecp256k1-dev \
   libsnmp-dev \
   libsqlite3-dev \
   libssl-dev \
@@ -99,7 +99,7 @@ RUN make install
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
 RUN git submodule update --init --remote misc/external/wolfssl/wolfssl
-RUN make RADCLI=1 exclude_modules="app_java app_python db_cassandra db_oracle dnssec jwt ndb_cassandra nats nsq osp ruxc secsipid secsipid_proc stirshaken" cfg
+RUN make RADCLI=1 exclude_modules="app_python db_cassandra db_oracle dnssec jwt ndb_cassandra nats nsq osp ruxc secsipid secsipid_proc stirshaken" cfg
 RUN make RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
 RUN make RADCLI=1 install
 WORKDIR src/modules/tls
