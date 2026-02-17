@@ -8,7 +8,7 @@ ${KAMBIN} -f ./kamailio-allmods.cfg -dd -E 2>&1 | tee /tmp/kamailio-allmods.log
 echo
 echo "--- grep output"
 echo
-grep "undefined symbol" /tmp/kamailio-allmods.log
+grep -e "undefined symbol" -e "could not find module" /tmp/kamailio-allmods.log
 ret=$?
 if [ ! "$ret" -eq 1 ] ; then
     exit 1
@@ -18,7 +18,7 @@ ${KAMBIN} -f ./kamailio-allmods.cfg -dd -E  -A WITH_IMS -A WITH_RTPPROXY 2>&1 | 
 echo
 echo "--- grep output"
 echo
-grep "undefined symbol" /tmp/kamailio-allmods.log
+grep -e "undefined symbol" -e "could not find module" /tmp/kamailio-allmods.log
 ret=$?
 if [ ! "$ret" -eq 1 ] ; then
     exit 1
