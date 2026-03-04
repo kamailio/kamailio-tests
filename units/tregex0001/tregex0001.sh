@@ -3,12 +3,12 @@
 . ../../etc/config
 . ../../libs/utils
 
-LOG=/tmp/kamailio-tregexxx0001.log
+LOG=/tmp/kamailio-tregex0001.log
 
 cp regex_groups_1 /tmp/regex_groups
-echo "--- start kamailio -f ./kamailio-tregexxx0001.cfg"
+echo "--- start kamailio -f ./kamailio-tregex0001.cfg"
 ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} \
-	-f ./kamailio-tregexxx0001.cfg -a no -ddd -E 2>&1 | tee ${LOG} &
+	-f ./kamailio-tregex0001.cfg -a no -ddd -E 2>&1 | tee ${LOG} &
 ret=$?
 sleep 1
 sipsak -s sip:test@127.0.0.1 -B "HOLA caracola"
