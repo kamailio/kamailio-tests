@@ -5,7 +5,7 @@ RUN groupadd -r mysql && useradd -r -g mysql mysql
 RUN apt-get update
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get install --assume-yes apt-utils \
-  autoconf gcc g++ make procps \
+  autoconf gcc g++ make cmake procps \
   coreutils exuberant-ctags curl gawk gdb git jq lynx netcat-traditional ngrep sed sip-tester vim wget \
   bison libtool \
   debhelper \
@@ -99,13 +99,17 @@ RUN make install
 
 COPY kamailio /usr/local/src/kamailio
 WORKDIR /usr/local/src/kamailio
+RUN mkdir build
 RUN git submodule update --init --remote misc/external/wolfssl/wolfssl
 RUN make RADCLI=1 exclude_modules="app_python db_cassandra db_oracle dnssec jwt ndb_cassandra nats nsq osp ruxc stirshaken" cfg
-RUN make RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
-RUN make RADCLI=1 install
+# RUN make RADCLI=1 Q=0 CC_EXTRA_OPTS="-Wall" all
+# RUN make RADCLI=1 install
+RUN cmake -S . -B build -DMODULE_GROUP_NAME=ALL -DEXCLUDE_MODULES="app_python auth_arnacon db_cassandra db_oracle dnssec jwt ndb_cassandra nats nsq osp ruxc stirshaken tls_wolfssl"
+RUN cmake --build build
+RUN cmake --build build -t dbschema
+RUN cmake --install build
 WORKDIR src/modules/tls
 RUN make install-tls-cert
-
 ENV DBENGINE=MYSQL
 ENV DBRWPW=kamailiorw
 ENV DBROOTPW=ktestsrootpw
