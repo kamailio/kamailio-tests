@@ -18,7 +18,7 @@ directory is considered to be the name of the unit.
 The name of a unit test has the format `txxxxxnnnn`, the rules being:
 
   * `t` - the first character in the name (`t` from `test`)
-  * `xxxx` - any five characters (use lower case letters) that should identify a group of tests
+  * `xxxxx` - any five characters (use lower case letters) that should identify a group of tests
   (e.g., `cfgxx` is used to identify tests related to default `kamailio.cfg`)
   * `nnnn` - four digits to assign to different unit tests in the same group, use zeros to pad
   in order to have always four digits (e.g., `0001`)
