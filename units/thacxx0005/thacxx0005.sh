@@ -18,7 +18,7 @@ sleep 1
 
 NCALLS=20
 echo "-------------- starting sipp UAC -------------------------"
-sipp -sf uac.xml -m ${NCALLS} 127.0.0.1:5060
+sipp -sf uac.xml -p 5061 -m ${NCALLS} 127.0.0.1:5060
 
 kill_pidfile ${KAMPID}
 sleep 1
