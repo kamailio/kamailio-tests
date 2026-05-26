@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <scenario name="Basic UAS scenario">
- <recv request="INVITE">
-  
- <!-- since SIPp complains about not used variable reference the trach var -->
- <Reference variables="trash"/>
+ <recv request="INVITE"/>
 
  <send retrans="500">
   <![CDATA[
