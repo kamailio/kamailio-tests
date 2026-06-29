@@ -11,6 +11,7 @@ echo "--- expected hmac-sha256 token: ${EXPECTED}"
 
 echo "--- start kamailio -f ./kamailio-tauthx0004.cfg"
 rm -f /tmp/kamailio-tauthx0004.log
+rm -f ${KAMPID}
 ${KAMBIN} -P ${KAMPID} -w . -Y ${KAMRUN} -f ./kamailio-tauthx0004.cfg -a no -ddd -E 2>&1 | tee /tmp/kamailio-tauthx0004.log &
 sleep 1
 sipsak -H 127.0.0.1 -c sip:alice@127.0.0.1 -s sip:bob@127.0.0.1 -B "hello there"
