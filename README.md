@@ -79,6 +79,7 @@ Following tools are installed inside the container and can be used to create tes
   * `grep`
   * `jq`
   * `sed`
+  * `sipexer` (installed from the latest configured GitHub release)
   * `sipp` (`sip-tester`)
   * `sipsak` (installed from git)
 
