@@ -5,6 +5,7 @@ KAMCTL=${KAMCTL:-/usr/local/sbin/kamctl}
 KAMCFG=${KAMCFG:-/usr/local/sbin/kamailio.cfg}
 KAMRUN=${KAMRUN:-/var/run/kamailio}
 KAMPID=${KAMPID:-${KAMRUN}/kamailio.pid}
+KAMPRM=${KAMPRM:--A ACTIVE}
 
 LOGFILE=/tmp/kamailio-tests.log
 
