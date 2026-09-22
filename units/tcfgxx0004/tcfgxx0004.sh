@@ -4,7 +4,8 @@
 . ../../libs/utils
 
 echo "--- start kamailio with the default config"
-${KAMBIN} -P "${KAMPID}" -w "${KAMRUN}" -Y "${KAMRUN}" -A ACTIVE -a no -E -dd
+echo "cmd: ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} ${KAMPRM} -a no -E -dd"
+${KAMBIN} -P "${KAMPID}" -w "${KAMRUN}" -Y "${KAMRUN}" ${KAMPRM} -a no -E -dd
 ret=$?
 if [ "${ret}" -ne 0 ]; then
 	exit "${ret}"
