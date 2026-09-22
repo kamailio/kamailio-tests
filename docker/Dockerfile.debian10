@@ -1,4 +1,12 @@
+ARG SIPEXER_VERSION=2.1.0
+FROM golang:1.25-bookworm AS sipexer-builder
+ARG SIPEXER_VERSION
+RUN git clone --depth 1 --branch v${SIPEXER_VERSION} https://github.com/miconda/sipexer /tmp/sipexer && \
+    cd /tmp/sipexer && CGO_ENABLED=0 go build -o /go/bin/sipexer .
+
 FROM debian:buster
+
+COPY --from=sipexer-builder /go/bin/sipexer /usr/local/bin/sipexer
 
 RUN groupadd -r mysql && useradd -r -g mysql mysql
 
