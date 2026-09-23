@@ -4,8 +4,8 @@
 . ../../libs/utils
 
 echo
-echo "--- start with default config: ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -a no"
-${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} -a no
+echo "--- start with default config: ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} ${KAMPRM} -a no"
+${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} ${KAMPRM} -a no
 ret=$?
 sleep 1
 if [ ! "$ret" -eq 0 ] ; then
