@@ -9,7 +9,7 @@ echo "--- start kamailio -f ./kamailio-tpvxxx0001.cfg"
 ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} \
 	-f ./kamailio-tpvxxx0001.cfg -a no -ddd -E 2>&1 | tee ${LOG} &
 sleep 1
-sipsak -M -s sip:test1test@127.0.0.1
+sipexer -message -mb "test message from sipexer for user test1test." -tuser test1test -sd sip:test1test@127.0.0.1
 sleep 1
 kill_pidfile ${KAMPID}
 sleep 1
