@@ -11,13 +11,14 @@ ${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} \
 	-f ./kamailio-tregex0001.cfg -a no -ddd -E 2>&1 | tee ${LOG} &
 ret=$?
 sleep 1
-sipsak -s sip:test@127.0.0.1 -B "HOLA caracola"
+sipexer -message -mb "HOLA caracola" -tuser test -sd sip:test@127.0.0.1
 
 echo "--- regex reload ---"
 cp regex_groups_2 /tmp/regex_group
 ${KAMCTL} kamcmd regex.reload
 sleep 1
-sipsak -s sip:test@127.0.0.1 -B "ADIOS caracola"
+sipexer -message -mb "ADIOS caracola" -tuser test -sd sip:test@127.0.0.1
+
 sleep 1
 kill_pidfile ${KAMPID}
 sleep 1
