@@ -11,8 +11,9 @@ function run() {
 	${KAMBIN} -P ${KAMPID} -w ${KAMRUN} -Y ${KAMRUN} \
 		-f ./kamailio-tregxx0001.cfg -a no -ddd -E 2>&1 | tee ${LOG} &
 	sleep 1
-	sipsak -U -s sip:test@127.0.0.1 -C sip:test@127.2.2.1:5066
-	sipsak -M -s sip:test@127.0.0.1
+	sipexer -register -co -com -ex 60 -fuser test -cb -sd udp:127.0.0.1:5060
+	sipexer -message -mb "Hello" -tuser test -sd sip:test@127.0.0.1
+
 	sleep 1
 	kill_pidfile ${KAMPID}
 	sleep 1
