@@ -48,6 +48,9 @@ Useful shell functions that might be handy to use in units are stored inside fil
 The Dockerfiles that can be used to build Docker images to run the unit tests are located in
 `docker` subfolder. These are:
 
+  * `docker/Dockerfile.debiansid` - container build with Debian Sid (Unstable) deploying Kamailio
+  installed from source code. The directory with Kamailio source code is copied from local disk into
+  the container
   * `docker/Dockerfile.debian13` - container build with Debian 13.x (Trixie) deploying Kamailio installed
   from source code. The directory with Kamailio source code is copied from local disk into the
   container
