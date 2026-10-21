@@ -1,0 +1,25 @@
+#!/bin/bash
+# shellcheck disable=SC1091
+. ../../etc/config
+. ../../libs/utils
+
+LOG=/tmp/kamailio-tpvhdr0001.log
+
+echo "--- start kamailio -f ./kamailio-tpvhdr0001.cfg"
+${KAMBIN} -P "${KAMPID}" -w "${KAMRUN}" -Y "${KAMRUN}" \
+	-f ./kamailio-tpvhdr0001.cfg -a no -ddd -E 2>&1 | tee ${LOG} &
+sleep 1
+sipexer -message -mb "test message from sipexer for user test1test." -tuser test1test -sd sip:test1test@127.0.0.1
+sleep 1
+kill_pidfile "${KAMPID}"
+sleep 1
+echo
+echo "--- grep output"
+echo
+for i in {0..13}; do
+	if ! grep -q "test${i}: OK" ${LOG}; then
+		echo "test${i} failed"
+		exit 1
+	fi
+done
+exit 0
