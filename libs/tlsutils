@@ -1,0 +1,118 @@
+# shellcheck shell=bash
+# helper functions for TLS unit tests (ttlsxx*)
+#
+# expects etc/config and libs/utils to be sourced and these variables set
+# by the unit: UNIT, WORKDIR, CFG
+#
+# provides: tls_probe, KLOG, ret, tls_require_tools, tls_workdir_init,
+#           tls_mk_ca, tls_mk_cert, tls_mk_selfsigned, tls_start_kamailio,
+#           tls_kamailio_alive, tls_fail, tls_end_test, tls_cert_cn
+
+KLOG="${WORKDIR}/kamailio.log"
+ret=0
+
+tls_probe() {
+	python3 ../../libs/tlsprobe.py "$@"
+}
+
+tls_fail() {
+	echo "FAIL: $*"
+	ret=1
+}
+
+tls_end_test() {
+	[ -f "${KAMPID}" ] && kill_pidfile "${KAMPID}" 2>/dev/null
+	sleep 1
+	if [ "${ret}" -ne 0 ] && [ -f "${KLOG}" ]; then
+		echo "--- last kamailio log lines"
+		tail -20 "${KLOG}"
+	fi
+	rm -rf "${WORKDIR}"
+	exit ${ret}
+}
+
+# exit 0 (test not run) when a needed tool is missing
+tls_require_tools() {
+	local tool
+	for tool in openssl python3 "$@"; do
+		if ! (which "${tool}" > /dev/null 2>&1); then
+			echo "${tool} not found, not run"
+			exit 0
+		fi
+	done
+}
+
+tls_workdir_init() {
+	rm -rf "${WORKDIR}"
+	mkdir -p "${WORKDIR}"
+}
+
+# tls_mk_ca NAME - creates ${WORKDIR}/NAME.crt and NAME.key
+tls_mk_ca() {
+	openssl req -x509 -newkey rsa:2048 -nodes -days 2 \
+		-keyout "${WORKDIR}/$1.key" -out "${WORKDIR}/$1.crt" \
+		-subj "/CN=$1/O=kamailio-tests" \
+		-addext "basicConstraints=critical,CA:TRUE" \
+		-addext "keyUsage=critical,keyCertSign,cRLSign" 2>/dev/null
+}
+
+# tls_mk_cert NAME CN CA [SAN] - certificate NAME signed by CA
+#   SAN is an openssl subjectAltName value, e.g. "DNS:a.test,IP:127.0.0.1"
+tls_mk_cert() {
+	local name="$1" cn="$2" ca="$3" san="$4"
+	local ext="${WORKDIR}/${name}.ext"
+	echo "basicConstraints=CA:FALSE" > "${ext}"
+	echo "extendedKeyUsage=serverAuth,clientAuth" >> "${ext}"
+	[ -n "${san}" ] && echo "subjectAltName=${san}" >> "${ext}"
+	openssl req -newkey rsa:2048 -nodes \
+		-keyout "${WORKDIR}/${name}.key" -out "${WORKDIR}/${name}.csr" \
+		-subj "/CN=${cn}/O=kamailio-tests" 2>/dev/null
+	openssl x509 -req -in "${WORKDIR}/${name}.csr" -days 1 \
+		-CA "${WORKDIR}/${ca}.crt" -CAkey "${WORKDIR}/${ca}.key" \
+		-CAcreateserial -extfile "${ext}" \
+		-out "${WORKDIR}/${name}.crt" 2>/dev/null
+}
+
+# tls_mk_selfsigned NAME CN [SAN]
+tls_mk_selfsigned() {
+	local name="$1" cn="$2" san="$3"
+	if [ -n "${san}" ]; then
+		openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+			-keyout "${WORKDIR}/${name}.key" -out "${WORKDIR}/${name}.crt" \
+			-subj "/CN=${cn}/O=kamailio-tests" \
+			-addext "subjectAltName=${san}" 2>/dev/null
+	else
+		openssl req -x509 -newkey rsa:2048 -nodes -days 1 \
+			-keyout "${WORKDIR}/${name}.key" -out "${WORKDIR}/${name}.crt" \
+			-subj "/CN=${cn}/O=kamailio-tests" 2>/dev/null
+	fi
+}
+
+# tls_start_kamailio TLSCFG - start ${CFG} with __TLS_CFG__ replaced
+tls_start_kamailio() {
+	local runcfg="${WORKDIR}/kamailio.cfg"
+	sed "s|__TLS_CFG__|$1|g" "${CFG}" > "${runcfg}"
+	${KAMBIN} -P "${KAMPID}" -w "${KAMRUN}" -Y "${KAMRUN}" -a no \
+		-f "${runcfg}" > "${KLOG}" 2>&1
+	local rc=$?
+	sleep 1
+	return ${rc}
+}
+
+# kamailio still running and no child died by a signal (a crashed
+# TCP/TLS worker makes the main process stop the whole server)
+tls_kamailio_alive() {
+	kill -0 "$(cat "${KAMPID}" 2>/dev/null)" 2>/dev/null || return 1
+	grep -q -E "exited by a signal|terminating due to SIGCHLD" "${KLOG}" \
+		&& return 1
+	return 0
+}
+
+# tls_cert_cn PORT [SNI] - print the CN of the certificate served on PORT
+tls_cert_cn() {
+	local sni=(-noservername)
+	[ -n "$2" ] && sni=(-servername "$2")
+	timeout 5 openssl s_client -connect "127.0.0.1:$1" "${sni[@]}" </dev/null 2>/dev/null \
+		| openssl x509 -noout -subject -nameopt multiline 2>/dev/null \
+		| awk -F' = ' '/commonName/{ print $2 }'
+}
