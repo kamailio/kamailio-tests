@@ -19,6 +19,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
+# shellcheck disable=SC1091
 . ../../etc/config
 . ../../libs/utils
 
@@ -27,14 +28,14 @@
 
 CFGFILE="kamailio-ttlsxx0003.cfg"
 TMPFILE=$(mktemp -t kamailio-test.XXXXXXXXXX)
-SIPSAKOPTS="-H localhost -s sip:127.0.0.1:5060 -v"
-KAMCMD="${KAMCTL} kamcmd"
-KAMCMDOPTS="-s unixs:${KAMRUN}/kamailio_ctl"
+SIPSAKOPTS=(-H localhost -s sip:127.0.0.1:5060 -v)
+KAMCMD=("${KAMCTL}" kamcmd)
+KAMCMDOPTS=(-s "unixs:${KAMRUN}/kamailio_ctl")
 TLSKEYFILE=kamailio-selfsigned.key
 TLSCERTFILE=kamailio-selfsigned.pem
 
 end_test_no_kamailio() {
-	rm -f ${TMPFILE} ${TLSKEYFILE} ${TLSCERTFILE}
+	rm -f "${TMPFILE}" "${TLSKEYFILE}" "${TLSCERTFILE}"
 	exit ${ret}
 }
 
@@ -45,14 +46,22 @@ end_test() {
 
 assert_tls_connections_count() {
 	# run tls.info and extract opened_connections value
-	tls_connections_count=$(${KAMCMD} ${KAMCMDOPTS} tls.info | awk '/opened_connections/{ print $2 }')
+	tls_connections_count=$("${KAMCMD[@]}" "${KAMCMDOPTS[@]}" tls.info | awk '/opened_connections/{ print $2 }')
 	ret=$?
 	if [ "${ret}" -ne 0 ] ; then
 		echo -e "\terror: kamcmd or awk returned ${ret}, aborting"
 		end_test
 	fi
 
-	if [ ! ${tls_connections_count} -eq "$1" ]; then
+	case "${tls_connections_count}" in
+		''|*[!0-9]*)
+			ret=1
+			echo -e "\terror: could not read opened_connections from tls.info (got '${tls_connections_count}')"
+			end_test
+			;;
+	esac
+
+	if [ "${tls_connections_count}" -ne "$1" ]; then
 		ret=1
 		echo -e "\terror: got ${tls_connections_count} tls connections count while expected: $1"
 		end_test
@@ -94,22 +103,22 @@ if [ "${ret}" -ne 0 ] ; then
 fi
 
 # send 1st request. should go sipsak --udp--> 127.0.0.1:5060 kamailio 127.0.0.1:random --tls domain with server_id:1--> 127.0.0.1:5061 kamailio
-sipsak ${SIPSAKOPTS} --headers "X-TLS-Server-ID: 1\n" > ${TMPFILE}
+sipsak "${SIPSAKOPTS[@]}" --headers "X-TLS-Server-ID: 1\n" > "${TMPFILE}"
 ret=$?
 if [ "${ret}" -ne 0 ] ; then
 	echo "1st sipsak returned ${ret}, aborting"
-	cat ${TMPFILE}
+	cat "${TMPFILE}"
 	end_test
 fi
 
 echo "--- test 1: connection is reused for the same TLS-domain"
 # send 2nd request. should go sipsak --udp--> 127.0.0.1:5060 kamailio 127.0.0.1:random --tls domain with server_id:1--> 127.0.0.1:5061 kamailio
 # this one is to check if first connection was reused
-sipsak ${SIPSAKOPTS} --headers "X-TLS-Server-ID: 1\n" > ${TMPFILE}
+sipsak "${SIPSAKOPTS[@]}" --headers "X-TLS-Server-ID: 1\n" > "${TMPFILE}"
 ret=$?
 if [ "${ret}" -ne 0 ] ; then
 	echo "2nd sipsak returned ${ret}, aborting"
-	cat ${TMPFILE}
+	cat "${TMPFILE}"
 	end_test
 fi
 
@@ -118,11 +127,11 @@ assert_tls_connections_count 2
 
 echo "--- test 2: new connection is created for the different TLS domain"
 # send 3rd request. should go sipsak --udp--> 127.0.0.1:5060 kamailio 127.0.0.1:random --tls domain with server_id:2--> 127.0.0.1:5061 kamailio
-sipsak ${SIPSAKOPTS} --headers "X-TLS-Server-ID: 2\n" > ${TMPFILE}
+sipsak "${SIPSAKOPTS[@]}" --headers "X-TLS-Server-ID: 2\n" > "${TMPFILE}"
 ret=$?
 if [ "${ret}" -ne 0 ] ; then
 	echo "3rd sipsak returned ${ret}, aborting"
-	cat ${TMPFILE}
+	cat "${TMPFILE}"
 	end_test
 fi
 
